@@ -1,0 +1,28 @@
+#!/bin/bash
+
+####################
+###   Binaries   ###
+####################
+DOCKER_COMPOSE=$(which docker-compose)
+####################
+
+if [ -z $1 ]; then
+    echo "Project name (in PascalCase) required"
+    exit 1
+fi
+
+if [ $1 = "-h" ]; then
+  echo "Usage:"
+  echo "  command [ProjectName]"
+  echo ""
+  echo "This command generates a new laravel project with a given name."
+  exit 1
+fi
+
+PROJECT_NAME=$1
+
+PROJECT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+mkdir ${PROJECT_PATH}/src
+${PROJECT_PATH}/bin/composer create-project --prefer-dist laravel/laravel .
+${PROJECT_PATH}/bin/phpartisan app:name PROJECT_NAME

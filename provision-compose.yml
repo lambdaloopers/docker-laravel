@@ -1,0 +1,7 @@
+version: '3.4'
+
+services:
+  composer:
+    image: library/composer:1.6
+    volumes:
+      - ./src:/app

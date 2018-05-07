@@ -1,0 +1,16 @@
+#!/bin/bash
+
+####################
+###   Binaries   ###
+####################
+DOCKER_COMPOSE=$(which docker-compose)
+####################
+
+PROJECT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+MODEL=$1
+MODEL_LOWER=$(echo "$MODEL" |tr '[:upper:]' '[:lower:]')
+
+${PROJECT_PATH}/bin/phpartisan make:model -a ${MODEL} &&
+mv ${PROJECT_PATH}/src/app/${MODEL}.php ${PROJECT_PATH}/src/app/Domain/Entities/${MODEL}.php
+${PROJECT_PATH}/bin/phpartisan make:seeder ${MODEL}TableSeeder

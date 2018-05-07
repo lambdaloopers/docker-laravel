@@ -1,0 +1,71 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: localhost:5000/nginx
+    networks:
+      - gateway
+      - default
+    depends_on:
+      - php
+    deploy:
+      labels:
+        - "traefik.docker.network=traefik_gateway"
+        - "traefik.port=80"
+        - "traefik.frontend.rule=Host:example.com"
+        - "traefik.backend=example"
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+      resources:
+        limits:
+          memory: 128M
+          cpus: "1"
+        reservations:
+          memory: 64M
+
+  php:
+    image: localhost:5000/php
+    depends_on:
+      - mysql
+    environment:
+      RUN_MIGRATIONS: ${DB_RUN_MIGRATIONS:-false}
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+      resources:
+        limits:
+          memory: 128M
+          cpus: "1"
+        reservations:
+          memory: 64M
+
+  mysql:
+    image: library/mysql:5.7
+    volumes:
+      - ./data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    deploy:
+      resources:
+        limits:
+          memory: 128M
+          cpus: "1"
+        reservations:
+          memory: 64M
+      placement:
+        constraints:
+          - node.labels.persistence == true
+
+networks:
+  gateway:
+    external:
+      name: traefik_gateway

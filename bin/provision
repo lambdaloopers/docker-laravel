@@ -1,0 +1,14 @@
+#!/bin/bash
+
+####################
+###   Binaries   ###
+####################
+DOCKER_COMPOSE=$(which docker-compose)
+####################
+
+PROJECT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
+
+while read line; do export "$line";
+done < <(cat ${PROJECT_PATH}/src/.env | grep -v "#" | grep -v "^$")
+
+${PROJECT_PATH}/bin/composer install
