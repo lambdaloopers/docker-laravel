@@ -25,4 +25,4 @@ PROJECT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && cd .. && pwd )"
 
 mkdir ${PROJECT_PATH}/src
 ${PROJECT_PATH}/bin/composer create-project --prefer-dist laravel/laravel .
-${PROJECT_PATH}/bin/phpartisan app:name PROJECT_NAME
+${PROJECT_PATH}/bin/phpartisan app:name ${PROJECT_NAME}
