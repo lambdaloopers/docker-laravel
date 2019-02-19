@@ -1,4 +1,4 @@
-FROM library/nginx:1.13
+FROM library/nginx:1.15
 
 ARG USER_ID=1000
 ARG GROUP_ID=1000
